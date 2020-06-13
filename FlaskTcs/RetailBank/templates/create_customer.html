@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-section col-md-6 col-lg-6" id="log">
+	<form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Create Customer Screen</legend>
+                <div class="form-group">
+                    {{ form.ssd_id.label(class="form-control-label") }}
+                    {% if form.ssd_id.errors %}
+                        {{ form.ssd_id(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.ssd_id.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.ssd_id(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.customer_name.label(class="form-control-label") }}
+                    {% if form.customer_name.errors %}
+                        {{ form.customer_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.customer_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.customer_age.label(class="form-control-label") }}
+                    {% if form.customer_age.errors %}
+                        {{ form.customer_age(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_age.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.customer_age(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.customer_address.label(class="form-control-label") }}
+                    {% if form.customer_address.errors %}
+                        {{ form.customer_address(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.customer_address(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.customer_state.label(class="form-control-label") }}
+                    {% if form.customer_state.errors %}
+                        {{ form.customer_state(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_state.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.customer_state(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.customer_city.label(class="form-control-label") }}
+                    {% if form.customer_city.errors %}
+                        {{ form.customer_city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_city.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.customer_city(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group text center">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <input class="btn btn-outline-info" type="reset" value="Resest">
+            </div>
+            
+        </form>
+    </div>
+{% endblock content %}
