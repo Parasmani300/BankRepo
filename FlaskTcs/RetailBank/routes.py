@@ -6,17 +6,16 @@ from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm
 from flask_login import login_user,current_user,logout_user,login_required
 
 
-@app.route('/')
 @app.route('/home',methods=['GET', 'POST'])
 def home():
-	return render_template('base.html',title='Home')
+	return render_template('home.html',title='Home')
 
 @app.route('/index',methods=['GET','POST'])
 @login_required
 def index():
-	return render_template('base.html')
+	return render_template('home.html')
 
-
+@app.route('/',methods=['GET', 'POST'])
 @app.route('/login',methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
