@@ -73,3 +73,33 @@ def customer_info():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/update_customer',methods=['GET','POST'])
+@login_required
+def update_customer():
+	if request.method == "POST":
+		cust_ssn_id = request.form.get('customer_ssnid')
+		customer_id = request.form.get('customer_id')
+		cust = Customer.query.filter_by(ssd_id=cust_ssn_id).first()
+		if cust:
+			return redirect(url_for('finish_update',ssnid=cust.ssd_id))
+	return render_template('update_customer.html')
+
+@app.route('/finish_update',methods=['GET','POST'])
+@login_required
+def finish_update():
+	ssn_id = request.args['ssnid']
+	cust = Customer.query.filter_by(ssd_id=ssn_id).first()
+	if request.method == "POST":
+		new_name = request.form.get('new_customer_name')
+		new_address = request.form.get('new_address')
+		new_age = request.form.get('new_age')
+		if new_name != "":
+			cust.customer_name = new_name
+		if new_address != "":
+			cust.customer_address = new_address
+		if new_age != "": 
+			cust.customer_age = new_age
+		db.session.commit()
+		return redirect(url_for('update_customer'))
+	return render_template('finish_update.html',cust=cust)
