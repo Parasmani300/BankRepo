@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect,request
-from RetailBank.models import userstore,Customer
+from RetailBank.models import userstore,Customer,Account
 from RetailBank import app,db,bcrypt
-from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm
+from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm,AccountForm
 
 from flask_login import login_user,current_user,logout_user,login_required
 
@@ -103,3 +103,24 @@ def finish_update():
 		db.session.commit()
 		return redirect(url_for('update_customer'))
 	return render_template('finish_update.html',cust=cust)
+
+@app.route('/create_account',methods=['GET','POST'])
+@login_required
+def create_account():
+	form = AccountForm()
+	if form.validate_on_submit():
+		ssn_no = form.ssd_id.data
+		cust = Customer.query.filter_by(ssd_id=ssn_no).first()
+		if cust:
+			account_type = form.account_type.data
+			deposit_amount = form.deposit_amount.data
+			cust_count = Customer.query.filter_by(ssd_id=ssn_no).count()
+			account_no = "FEDBNK"+str(ssn_no) + str(account_type) + str(cust_count + 10)
+			db.create_all()
+			account = Account(account_no=account_no,ssd_id=ssn_no,account_type=account_type,deposit_amount=deposit_amount)
+			db.session.add(account)
+			db.session.commit()
+			flash(f'Account Created Successfully','success')
+		else:
+			flash(f'Check if ssn id exists for customer','danger')
+	return render_template('create_account.html',form = form)
