@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect,request
 from RetailBank.models import userstore,Customer,Account
 from RetailBank import app,db,bcrypt
-from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm,AccountForm
+from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm,AccountForm,DeleteAccountForm
 
 from flask_login import login_user,current_user,logout_user,login_required
 
@@ -124,3 +124,62 @@ def create_account():
 		else:
 			flash(f'Check if ssn id exists for customer','danger')
 	return render_template('create_account.html',form = form)
+
+@app.route('/delete_account',methods=['GET','POST'])
+@login_required
+def delete_account():
+	form = DeleteAccountForm()
+	if form.validate_on_submit():
+		ssn_no = form.ssd_id.data
+		account_no = form.account_no.data
+		acc = Account.query.filter_by(ssd_id=ssn_no,account_no=account_no).first()
+		if acc:
+			Account.query.filter_by(ssd_id=ssn_no,account_no=account_no).delete()
+			db.session.commit()
+			flash('Account deleted Successfully','danger')
+			return redirect('/')
+	return render_template('deleteAccount.html',form=form)
+
+@app.route('/account_status',methods=['GET','POST'])
+@login_required
+def account_status():
+	accounts = Account.query.all()
+	return render_template('accountStatus.html',accounts=accounts)
+
+@app.route('/customer_status',methods=['GET','POST'])
+@login_required
+def customer_status():
+	customers = Customer.query.all()
+	return render_template('customerStatus.html',customers=customers)
+
+@app.route('/deposit_money',methods=['GET','POST'])
+@login_required
+def deposit_money():
+	if request.form.get('account_no'):
+		account_no = request.form.get('account_no')
+		acc = Account.query.filter_by(account_no=account_no).first()
+		if acc:
+			ssn_no = acc.ssd_id
+			account_type = acc.account_type
+			balance = acc.deposit_amount
+			return redirect(url_for('finish_transfer',account_no=account_no))
+	return render_template('search_customer.html')
+
+@app.route('/finish_transfer',methods=['GET','POST'])
+@login_required
+def finish_transfer():
+	account_no = request.args.get('account_no')
+	acc = Account.query.filter_by(account_no=account_no).first()
+	ssn_no = acc.ssd_id
+	account_type = acc.account_type
+	balance = acc.deposit_amount
+	account_type = acc.account_type
+	if request.form.get('deposit_amount'):
+		deposit_amount = int(request.form.get('deposit_amount'))
+		acc.deposit_amount = acc.deposit_amount + deposit_amount
+		try:
+			db.session.commit()
+			flash("Amount deposited successfully",'success')
+		except:
+			flash('Some error occured, Please try again!','danger')
+	return render_template('deposit_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)

@@ -26,7 +26,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{url_for('create_account')}}">Create Account</a>
-                        <a class="dropdown-item" href="#">Delete Account</a>
+                        <a class="dropdown-item" href="{{url_for('delete_account')}}">Delete Account</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -35,8 +35,8 @@
                         <b>Status Details</b>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Customer Status</a>
-                        <a class="dropdown-item" href="#">Account Status</a>
+                        <a class="dropdown-item" href="{{url_for('customer_status')}}">Customer Status</a>
+                        <a class="dropdown-item" href="{{url_for('account_status')}}">Account Status</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -45,7 +45,7 @@
                         <b>Account Operations</b>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="{{url_for('deposit_money')}}">Deposit Money</a>
                         <a class="dropdown-item" href="#">Another action</a>
                     </div>
                 </li>

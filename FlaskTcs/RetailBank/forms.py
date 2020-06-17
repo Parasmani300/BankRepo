@@ -29,3 +29,8 @@ class AccountForm(FlaskForm):
 	account_type = SelectField(u'Account Type',choices=[('Current','Current'),('Saving','Saving')],validators=[DataRequired()])
 	deposit_amount = IntegerField('Deposit Amount',validators=[DataRequired()])
 	submit = SubmitField('Create Account')
+
+class DeleteAccountForm(FlaskForm):
+	account_no = StringField('Account No',validators=[DataRequired()])
+	ssd_id = IntegerField('SSN No',validators= [DataRequired()])
+	submit = SubmitField('Delete Account')

@@ -1,0 +1,44 @@
+{% extends 'base.html'%}
+{%block content%}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h3 class="offset-2">Delete Account</h3>
+        <hr>
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group row">
+                {{ form.ssd_id.label(class="form-control-label col-md-2") }}
+                {% if form.ssd_id.errors %}
+                {{ form.ssd_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.ssd_id.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.ssd_id(class="form-control col-md-10 form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.account_no.label(class="form-control-label col-md-2") }}
+                {% if form.account_no.errors %}
+                {{ form.deposit_amount(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.account_no.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.account_no(class="form-control col-md-10 form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group text center">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <input class="btn btn-outline-info" type="reset" value="Resest">
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock %}

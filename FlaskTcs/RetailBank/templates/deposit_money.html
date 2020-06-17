@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h3 class="offset-2">Deposit Amount</h3>
+        <hr>
+        <div class="row">
+            <div class="col-md-2">
+                Account No
+            </div>
+            <div class="col-md-10">
+                {{account_no}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                SSN No
+            </div>
+            <div class="col-md-10">
+                {{ssn_no}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                Account Type
+            </div>
+            <div class="col-md-10">
+                {{account_type}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                Balance
+            </div>
+            <div class="col-md-10">
+                {{balance}}
+            </div>
+        </div>
+        <form action="" method="POST">
+            <div class="form-group row">
+                <label for="deposit_amount" class="col-md-2">Deposit Amount</label>
+                <input type="text" name="deposit_amount" class="col-md-10 form-control">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-outline-info" value="Deposit">
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock %}

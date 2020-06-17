@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>SSN No</th>
+                <th>Account No</th>
+                <th>Account Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts%}
+            <tr>
+                <td>{{account.ssd_id}}</td>
+                <th scope="row">{{account.account_no}}</thead>
+                <td>{{account.account_type}}</td>
+                <td>{{account.deposit_amount}}</td>
+                <td><a href="#">Active</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
