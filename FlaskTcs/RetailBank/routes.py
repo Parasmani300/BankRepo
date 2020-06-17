@@ -218,3 +218,46 @@ def finish_withdraw():
 		else:
 			flash("Oh!!!! Insufficent Balance, Try with some smaller amount","warning")
 	return render_template('withdraw_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)
+
+@app.route('/transfer_money',methods=['GET','POST'])
+@login_required
+def transfer_money():
+	if request.form.get('account_no'):
+		account_no = request.form.get('account_no')
+		acc = Account.query.filter_by(account_no=account_no).first()
+		if acc:
+			ssn_no = acc.ssd_id
+			account_type = acc.account_type
+			balance = acc.deposit_amount
+			return redirect(url_for('finish_transfer',account_no=account_no))
+	return render_template('search_customer.html')
+
+@app.route('/finish_transfer',methods=['GET','POST'])
+@login_required
+def finish_transfer():
+	account_no = request.args.get('account_no')
+	acc = Account.query.filter_by(account_no=account_no).first()
+	ssn_no = acc.ssd_id
+	account_type = acc.account_type
+	balance = acc.deposit_amount
+	account_type = acc.account_type
+	if request.form.get('deposit_amount') and request.form.get('account_no') and request.form.get('deposit_amount') and request.form.get('account_type'):
+		transfer_amount = int(request.form.get('deposit_amount'))
+		rec_account_type = request.form.get('account_type')
+		rec_account_no = request.form.get('account_no')
+		rec_acc  = Account.query.filter_by(account_no= rec_account_no,account_type= rec_account_type).first()
+		if rec_acc:
+			if transfer_amount < acc.deposit_amount:
+				acc.deposit_amount = acc.deposit_amount - transfer_amount
+				rec_acc.deposit_amount = rec_acc.deposit_amount + transfer_amount
+				try:
+					db.session.commit()
+					flash("Amount transferred successfully",'success')
+				except:
+					flash('Some error occured, Please try again!','danger')
+			else:
+				flash("Oh!!!! Insufficent Balance, Try with some smaller amount","warning")
+	return render_template('transfer_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)
+
+
+
