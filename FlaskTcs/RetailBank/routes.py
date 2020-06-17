@@ -162,12 +162,12 @@ def deposit_money():
 			ssn_no = acc.ssd_id
 			account_type = acc.account_type
 			balance = acc.deposit_amount
-			return redirect(url_for('finish_transfer',account_no=account_no))
+			return redirect(url_for('finish_deposit',account_no=account_no))
 	return render_template('search_customer.html')
 
-@app.route('/finish_transfer',methods=['GET','POST'])
+@app.route('/finish_deposit',methods=['GET','POST'])
 @login_required
-def finish_transfer():
+def finish_deposit():
 	account_no = request.args.get('account_no')
 	acc = Account.query.filter_by(account_no=account_no).first()
 	ssn_no = acc.ssd_id
@@ -183,3 +183,38 @@ def finish_transfer():
 		except:
 			flash('Some error occured, Please try again!','danger')
 	return render_template('deposit_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)
+
+@app.route('/withdraw_money',methods=['GET','POST'])
+@login_required
+def withdraw_money():
+	if request.form.get('account_no'):
+		account_no = request.form.get('account_no')
+		acc = Account.query.filter_by(account_no=account_no).first()
+		if acc:
+			ssn_no = acc.ssd_id
+			account_type = acc.account_type
+			balance = acc.deposit_amount
+			return redirect(url_for('finish_withdraw',account_no=account_no))
+	return render_template('search_customer.html')
+
+@app.route('/finish_withdraw',methods=['GET','POST'])
+@login_required
+def finish_withdraw():
+	account_no = request.args.get('account_no')
+	acc = Account.query.filter_by(account_no=account_no).first()
+	ssn_no = acc.ssd_id
+	account_type = acc.account_type
+	balance = acc.deposit_amount
+	account_type = acc.account_type
+	if request.form.get('deposit_amount'):
+		withdraw_amount = int(request.form.get('deposit_amount'))
+		if withdraw_amount < acc.deposit_amount:
+			acc.deposit_amount = acc.deposit_amount - withdraw_amount
+			try:
+				db.session.commit()
+				flash("Amount withdrawn successfully",'success')
+			except:
+				flash('Some error occured, Please try again!','danger')
+		else:
+			flash("Oh!!!! Insufficent Balance, Try with some smaller amount","warning")
+	return render_template('withdraw_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)
