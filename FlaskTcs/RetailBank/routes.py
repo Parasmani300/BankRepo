@@ -10,6 +10,7 @@ from sqlalchemy import Table,ForeignKey,create_engine
 
 @app.route('/home',methods=['GET', 'POST'])
 def home():
+	
 	return render_template('home.html',title='Home')
 
 @app.route('/index',methods=['GET','POST'])
@@ -288,3 +289,4 @@ def account_statment():
 		# trns = Transactions.query.filter_by(date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),date_posted <= datetime.strptime(start_date,'%Y-%m-%d')).all()
 		print(trns)
 	return render_template('account_statment.html',trns=trns)
+
