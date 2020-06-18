@@ -281,9 +281,10 @@ def account_statment():
 		trns = Transactions.query.filter_by(account_no=account_no).limit(int(request.form.get('last_n_trans'))).all()
 		print(trns)
 	elif request.form.get('account_no') and request.form.get('start_date') and request.form.get('end_date'):
+		account_no = request.form.get('account_no')
 		start_date = request.form.get('start_date')
 		end_date = request.form.get('end_date')
-		trns = Transactions.query.filter(Transactions.date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),Transactions.date_posted <= datetime.strptime(end_date,'%Y-%m-%d')).all()
+		trns = Transactions.query.filter(Transactions.account_no==account_no,Transactions.date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),Transactions.date_posted <= datetime.strptime(end_date,'%Y-%m-%d')).all()
 		# trns = Transactions.query.filter_by(date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),date_posted <= datetime.strptime(start_date,'%Y-%m-%d')).all()
 		print(trns)
 	return render_template('account_statment.html',trns=trns)
