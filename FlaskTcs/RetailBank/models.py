@@ -35,4 +35,15 @@ class Account(db.Model):
 	deposit_amount = db.Column(db.Integer,nullable=False)
 
 	def __repr__(self):
-		return f"Account('{self.account_no}','{self.ssd_id}','{self.account_type}','{self.deposit_amount}'"
+		return f"Account('{self.account_no}','{self.ssd_id}','{self.account_type}','{self.deposit_amount}')"
+
+class Transactions(db.Model):
+	__tablename__ = 'transactions'
+	transaction_id = db.Column(db.String(22),primary_key=True)
+	account_no = db.Column(db.String(22),ForeignKey('account.account_no'))
+	description = db.Column(db.String(22),nullable=False)
+	date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	amount = db.Column(db.Integer,nullable=True)
+
+	def __repr__(self):
+		return f"Transactions('{self.transaction_id}','{self.account_no}','{self.description}','{self.date_posted}'.{self.amount})"

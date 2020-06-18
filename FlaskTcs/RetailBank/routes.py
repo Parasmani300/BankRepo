@@ -1,9 +1,11 @@
 from flask import render_template, url_for, flash, redirect,request
-from RetailBank.models import userstore,Customer,Account
+from RetailBank.models import userstore,Customer,Account,Transactions
 from RetailBank import app,db,bcrypt
 from RetailBank.forms import Loginform,NewCustomerForm,DeleteCustomerForm,AccountForm,DeleteAccountForm
 
 from flask_login import login_user,current_user,logout_user,login_required
+from datetime import datetime
+from sqlalchemy import Table,ForeignKey,create_engine
 
 
 @app.route('/home',methods=['GET', 'POST'])
@@ -114,8 +116,8 @@ def create_account():
 		if cust:
 			account_type = form.account_type.data
 			deposit_amount = form.deposit_amount.data
-			cust_count = Customer.query.filter_by(ssd_id=ssn_no).count()
-			account_no = "FEDBNK"+str(ssn_no) + str(account_type) + str(cust_count + 10)
+			cust_count = Account.query.count()
+			account_no = "FEDBNK"+str(ssn_no) + str(account_type) + str(cust_count + 100)
 			db.create_all()
 			account = Account(account_no=account_no,ssd_id=ssn_no,account_type=account_type,deposit_amount=deposit_amount)
 			db.session.add(account)
@@ -177,6 +179,9 @@ def finish_deposit():
 	if request.form.get('deposit_amount'):
 		deposit_amount = int(request.form.get('deposit_amount'))
 		acc.deposit_amount = acc.deposit_amount + deposit_amount
+		db.create_all()
+		trns = Transactions(transaction_id=str(Transactions.query.count()+10),account_no=account_no,description="Deposited",amount=deposit_amount)
+		db.session.add(trns)
 		try:
 			db.session.commit()
 			flash("Amount deposited successfully",'success')
@@ -210,6 +215,9 @@ def finish_withdraw():
 		withdraw_amount = int(request.form.get('deposit_amount'))
 		if withdraw_amount < acc.deposit_amount:
 			acc.deposit_amount = acc.deposit_amount - withdraw_amount
+			db.create_all()
+			trns = Transactions(transaction_id=str(Transactions.query.count()+10),account_no=account_no,description="Withdraw",amount=withdraw_amount)
+			db.session.add(trns)
 			try:
 				db.session.commit()
 				flash("Amount withdrawn successfully",'success')
@@ -250,6 +258,11 @@ def finish_transfer():
 			if transfer_amount < acc.deposit_amount:
 				acc.deposit_amount = acc.deposit_amount - transfer_amount
 				rec_acc.deposit_amount = rec_acc.deposit_amount + transfer_amount
+				db.create_all()
+				trns = Transactions(transaction_id=str(Transactions.query.count()+10),account_no=account_no,description="Transferred to "+str(rec_account_no),amount=transfer_amount)
+				db.session.add(trns)
+				trns1 = Transactions(transaction_id=str(Transactions.query.count()+10),account_no=rec_account_no,description="Recieved from"+str(account_no),amount=transfer_amount)
+				db.session.add(trns1)
 				try:
 					db.session.commit()
 					flash("Amount transferred successfully",'success')
@@ -259,5 +272,18 @@ def finish_transfer():
 				flash("Oh!!!! Insufficent Balance, Try with some smaller amount","warning")
 	return render_template('transfer_money.html',account_no=account_no,ssn_no=ssn_no,account_type=account_type,balance=balance)
 
-
-
+@app.route('/account_statment',methods=['GET','POST'])
+@login_required
+def account_statment():
+	trns=None
+	if request.form.get('account_no') and request.form.get('last_n_trans'):
+		account_no = request.form.get('account_no')
+		trns = Transactions.query.filter_by(account_no=account_no).limit(int(request.form.get('last_n_trans'))).all()
+		print(trns)
+	elif request.form.get('account_no') and request.form.get('start_date') and request.form.get('end_date'):
+		start_date = request.form.get('start_date')
+		end_date = request.form.get('end_date')
+		trns = Transactions.query.filter(Transactions.date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),Transactions.date_posted <= datetime.strptime(end_date,'%Y-%m-%d')).all()
+		# trns = Transactions.query.filter_by(date_posted >= datetime.strptime(start_date,'%Y-%m-%d'),date_posted <= datetime.strptime(start_date,'%Y-%m-%d')).all()
+		print(trns)
+	return render_template('account_statment.html',trns=trns)
