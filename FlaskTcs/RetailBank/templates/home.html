@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="jumbotron">
-	<h1>Home Page {{user}}</h1>
+<h1 style="text-align: center;">Welcome {{ current_user.login }}</h1>
+<br>
+<div style="text-align: center;">
+	<h3>Search For Customer</h3>
+	<br>
+	<form action="#" method="POST">
+		<p>Enter Customer SSD_ID </p>
+		<br>
+		<input type="text" name="id"></p>
+		<br>
+		<div>
+			<input class="btn btn-info" type="submit" value="Search">
+			<input class="btn btn-info" type="reset" value="Resest">
+		</div>
+	</form>
+	<br>
 </div>
 
 {% endblock %}

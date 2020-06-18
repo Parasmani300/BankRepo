@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Customer Information</h2>
+    <p>This page displays the information of the customer {{ cust.customer_name }}</p>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer SSN ID</div>
+            <div class="panel-body">{{ cust.ssd_id}}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer Name</div>
+            <div class="panel-body">{{ cust.customer_name }}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer Age</div>
+            <div class="panel-body">{{ cust.customer_age }}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer Address</div>
+            <div class="panel-body">{{ cust.customer_address }}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer State</div>
+            <div class="panel-body">{{ cust.customer_state }}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Customer City</div>
+            <div class="panel-body">{{ cust.customer_city }}</div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

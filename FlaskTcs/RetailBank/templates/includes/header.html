@@ -14,7 +14,6 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{url_for('create_customer')}}">Create Customer</a>
-                        <a class="dropdown-item" href="{{url_for('customer_info')}}">Customer Info</a>
                         <a class="dropdown-item" href="{{url_for('delete')}}">Delete Customer</a>
                         <a class="dropdown-item" href="{{url_for('update_customer')}}">Update Customer</a>
                     </div>
@@ -50,6 +49,8 @@
                         <a class="dropdown-item" href="{{url_for('transfer_money')}}">Transfer Money</a>
                     </div>
                 </li>
+                <li class="nav-item"><a class="nav-link text-dark" href="{{url_for('account_statment')}}"><b>Account
+                            Statment</b></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="{{url_for('logout')}}"><b>Logout</b></a></li>
             </ul>
         </nav>

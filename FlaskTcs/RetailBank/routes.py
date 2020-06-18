@@ -10,7 +10,15 @@ from sqlalchemy import Table,ForeignKey,create_engine
 
 @app.route('/home',methods=['GET', 'POST'])
 def home():
-	
+	if request.method == "POST":
+		ssd_id_1=request.form["id"]
+		cust=Customer.query.filter_by(ssd_id=ssd_id_1).first()
+		if not cust:
+			flash(f'{ssd_id_1} not present in the database.','danger')
+			return redirect(url_for('home'))
+		else:
+			return render_template('customer_info.html',cust=cust)
+	return render_template("home.html")
 	return render_template('home.html',title='Home')
 
 @app.route('/index',methods=['GET','POST'])
